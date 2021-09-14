@@ -1,4 +1,4 @@
-const bday = "9 Mar 2022";
+bday = "03/09/2001";
 
 
 const daysDisplay = document.getElementById("days");
@@ -9,9 +9,20 @@ const secondsDisplay = document.getElementById("seconds");
 
 function countdown() {
     const today = new Date();
-    const birthdate = new Date(bday);
+    let birthday = new Date(bday);
 
-    const secondsDifference = (birthdate.getTime() - today.getTime()) / 1000;
+    let secondsDifference = (birthday.getTime() - today.getTime()) / 1000;
+    let bdayData;
+
+    //Ensures the countdown will never be negative
+    while(secondsDifference < 0){
+        bdayData = bday.split("/");
+        year = Number(bdayData[2]);
+        year += 1;
+        bday = "03/09/" + year
+        birthday = new Date(bday);
+        secondsDifference = (birthday.getTime() - today.getTime()) / 1000;
+    }
 
     const seconds = Math.floor(secondsDifference) % 60;
     const minutes = Math.floor(secondsDifference/60) % 60;
@@ -19,9 +30,19 @@ function countdown() {
     const days = Math.floor(secondsDifference / (60*60*24));
 
     daysDisplay.innerHTML = days;
-    hoursDisplay.innerHTML = hours;
-    minutesDisplay.innerHTML = minutes;
-    secondsDisplay.innerHTML = seconds;
+    hoursDisplay.innerHTML = addZeros(hours);
+    minutesDisplay.innerHTML = addZeros(minutes);
+    secondsDisplay.innerHTML = addZeros(seconds);
+}
+
+//Ensure that any value under 10 will be padded with an extra zero, e.g. 06 instead of 6
+function addZeros(val){
+    if(val < 10){
+        return `0${val}`;
+    }
+    else{
+        return val;
+    }
 }
 
 //Every second call the countdown function to refresh the timer
